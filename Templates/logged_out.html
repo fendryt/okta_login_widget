@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}- Logged out{% endblock %}
+
+{% load static %}
+{% block head_js %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Signing out...</h1>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script type="text/javascript">
+var oktaSignIn = new OktaSignIn({
+    baseUrl: 'https://{{ org }}'
+});
+oktaSignIn.session.get(function (res) {
+    if (res.status === 'ACTIVE') {
+        //clear tokens from local storage
+        oktaSignIn.tokenManager.clear();
+
+        oktaSignIn.session.close(function (err) {
+            if (err) {
+                console.log(err);
+                return;
+            } else {
+                console.log('logged out successfully');
+                console.log('redirecting to page='+ '{{ page }}');
+                window.location.href = '{{ page }}';
+                return;
+            }
+        });
+    } else {
+        window.location.href = '/';
+    }
+})
+</script>
+{% endblock %}

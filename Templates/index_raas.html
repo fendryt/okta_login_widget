@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head_js %}
+{% endblock %}
+
+
+{% block content %}
+<div class="login-pg login-pg-raas" style="background-image: url({{ background }});">
+	<div class="row">
+		<div class="container-fluid">
+			<div id="widget-b3">
+				<div id="okta-login-container"></div>
+				<div id="link-to-form" class="link-to-form">
+					<p><a href="/register">Click here to see a Form Example</a></p>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div id="code-preview" class="code-preview">
+					<form class="form-horizontal" name="RegistrationForm" action="{% url 'login_raas' %}" method="post">
+						<div class="btn-toolbar" role="toolbar" aria-label="...">
+							<button type="submit" class="btn btn-primary btn-xs" name="Update">Update & Reload</button>
+							<button type="submit" class="btn btn-primary btn-xs" name="Default">Reset</button>
+						</div>
+						<textarea id="myText" name="myText"></textarea>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script>
+var ele = document.getElementById("link-to-form");
+if (ele) {
+	ele.style.display="none";
+}
+</script>
+<script id="theScript">
+{{ js|safe }}
+</script>
+<script>
+oktaSignIn.on('pageRendered', function(data) {
+	if (ele) {
+		if(data.page==='registration'){
+			ele.style.display="block";
+		} else {
+			ele.style.display="none";
+		}
+	}
+});
+</script>
+{% endblock %}
